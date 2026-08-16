@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ECO IGNI-15 V9.5.9</title>
+    <style>
+        body { background: #000; color: #00FF00; font-family: monospace; text-align: center; padding: 50px; }
+        button { background: #00FF00; color: #000; border: none; padding: 15px 30px; font-size: 16px; cursor: pointer; }
+        input { padding: 10px; width: 300px; }
+        #log { margin-top: 20px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>ECO IGNI-15: REGISTRE O MANIFESTO V9.5.9</h1>
+    
+    <h3>1. Criar Transação</h3>
+    <input id="sender" placeholder="Remetente">
+    <input id="recipient" placeholder="Destinatário">
+    <input id="amount" placeholder="Valor" type="number">
+    <button onclick="criarTransacao()">Enviar Transação</button>
+
+    <h3>2. Minerar Bloco</h3>
+    <button onclick="minerar()">MINERAR</button>
+
+    <h3>3. Ver Blockchain</h3>
+    <button onclick="verChain()">VER CHAIN</button>
+
+    <div id="log"></div>
+
+    <script>
+        const API_URL = "https://SEU-LINK-DA-API.onrender.com" // troque pelo link da V9.5.9
+
+        function log(msg) {
+            document.getElementById('log').innerHTML += msg + "<br>"
+        }
+
+        async function criarTransacao() {
+            const res = await fetch(API_URL + "/transactions/new", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    sender: document.getElementById('sender').value,
+                    recipient: document.getElementById('recipient').value,
+                    amount: parseFloat(document.getElementById('amount').value)
+                })
+            })
+            const data = await res.json()
+            log("Transação criada: " + JSON.stringify(data))
+        }
+
+        async function minerar() {
+            const res = await fetch(API_URL + "/mine")
+            const data = await res.json()
+            log("Bloco minerado: " + JSON.stringify(data))
+        }
+
+        async function verChain() {
+            const res = await fetch(API_URL + "/chain")
+            const data = await res.json()
+            log("Chain: " + JSON.stringify(data, null, 2))
+        }
+    </script>
+</body>
+</html>

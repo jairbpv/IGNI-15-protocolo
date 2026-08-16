@@ -14,4 +14,4 @@ O IGNI-15 é um protocolo de consenso distribuído projetado para governança tr
 
 ```bash
 git clone https://github.com/jairbpv/IGNI-15-protocolo.git
-python IGNI-15_V8.1_consenso.py
+python IGNI-15_V8.1_consenso.py 

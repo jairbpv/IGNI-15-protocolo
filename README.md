@@ -31,3 +31,10 @@ igni.votar(hash_prop, "no_02", "sim")
 igni.verificar_consenso(hash_prop)
 
 
+
+---
+**Autor:** Jair Olindino Bernardo Junior  
+**Lançado em:** 16/08/2026 - Palhoça, SC - Brasil  
+**Licença:** MIT
+
+*"Governança sem centralização. Poder distribuído com responsabilidade."*

@@ -1,62 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>ECO IGNI-15 V9.5.9</title>
+    <meta charset="UTF-8">
+    <title>IGNI-15 V9.5.9 - Interface do Limiar</title>
     <style>
-        body { background: #000; color: #00FF00; font-family: monospace; text-align: center; padding: 50px; }
-        button { background: #00FF00; color: #000; border: none; padding: 15px 30px; font-size: 16px; cursor: pointer; }
-        input { padding: 10px; width: 300px; }
-        #log { margin-top: 20px; text-align: left; }
+        body { background-color: #000; color: #00FF00; font-family: 'Courier New', monospace; text-align: center; padding: 20px; }
+        h1 { text-shadow: 0 0 10px #00FF00; }
+        .container { border: 2px solid #00FF00; padding: 20px; max-width: 600px; margin: auto; border-radius: 10px; }
+        input, button { background-color: #111; color: #00FF00; border: 1px solid #00FF00; padding: 10px; margin: 5px; width: 90%; border-radius: 5px; }
+        button { cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #00FF00; color: #000; }
+        #resultado { margin-top: 20px; white-space: pre-wrap; word-wrap: break-word; text-align: left; }
     </style>
 </head>
 <body>
-    <h1>ECO IGNI-15: REGISTRE O MANIFESTO V9.5.9</h1>
+    <h1>IGNI-15 V9.5.9</h1>
+    <h2>INTERFACE DO LIMIAR</h2>
     
-    <h3>1. Criar Transação</h3>
-    <input id="sender" placeholder="Remetente">
-    <input id="recipient" placeholder="Destinatário">
-    <input id="amount" placeholder="Valor" type="number">
-    <button onclick="criarTransacao()">Enviar Transação</button>
+    <div class="container">
+        <h3>Criar Transação</h3>
+        <input type="text" id="sender" placeholder="Sender: IGNI">
+        <input type="text" id="recipient" placeholder="Recipient: Genesis">
+        <input type="number" id="amount" placeholder="Amount: 100">
+        <button onclick="criarTransacao()">Enviar Transação</button>
+    </div>
 
-    <h3>2. Minerar Bloco</h3>
-    <button onclick="minerar()">MINERAR</button>
+    <div class="container" style="margin-top: 20px;">
+        <h3>Controle da Chain</h3>
+        <button onclick="minerar()">MINERAR</button>
+        <button onclick="verChain()">VER CHAIN</button>
+        <button onclick="verificar()">VERIFICAR CHAIN</button>
+    </div>
 
-    <h3>3. Ver Blockchain</h3>
-    <button onclick="verChain()">VER CHAIN</button>
-
-    <div id="log"></div>
+    <div id="resultado"></div>
 
     <script>
-        const API_URL = "https://SEU-LINK-DA-API.onrender.com" // troque pelo link da V9.5.9
-
-        function log(msg) {
-            document.getElementById('log').innerHTML += msg + "<br>"
-        }
+        const API_URL = window.location.origin;
 
         async function criarTransacao() {
-            const res = await fetch(API_URL + "/transactions/new", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    sender: document.getElementById('sender').value,
-                    recipient: document.getElementById('recipient').value,
-                    amount: parseFloat(document.getElementById('amount').value)
-                })
-            })
-            const data = await res.json()
-            log("Transação criada: " + JSON.stringify(data))
+            const s = document.getElementById('sender').value;
+            const r = document.getElementById('recipient').value;
+            const a = document.getElementById('amount').value;
+            const res = await fetch(API_URL + '/transactions/new', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({sender: s, recipient: r, amount: a})
+            });
+            const data = await res.json();
+            document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
         }
 
         async function minerar() {
-            const res = await fetch(API_URL + "/mine")
-            const data = await res.json()
-            log("Bloco minerado: " + JSON.stringify(data))
+            const res = await fetch(API_URL + '/mine');
+            const data = await res.json();
+            document.getElementById('resultado').innerText = 'BLOCO MINERADO!\n' + JSON.stringify(data, null, 2);
         }
 
         async function verChain() {
-            const res = await fetch(API_URL + "/chain")
-            const data = await res.json()
-            log("Chain: " + JSON.stringify(data, null, 2))
+            const res = await fetch(API_URL + '/chain');
+            const data = await res.json();
+            document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+        }
+        
+        async function verificar() {
+            const res = await fetch(API_URL + '/valid');
+            const data = await res.json();
+            document.getElementById('resultado').innerText = 'STATUS: ' + JSON.stringify(data, null, 2);
         }
     </script>
 </body>
